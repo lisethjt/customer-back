@@ -32,13 +32,7 @@ jobs:
           mvn clean test package
           echo "building feature branch"
 
-      - name: Run unit tests
-        run: mvn test
-
-      - name: Build with Maven
-        run: mvn package -DskipTests
-# Automatic merge
-merge-feature-into-develop:
+  merge-feature-into-develop:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ success() }}
@@ -54,15 +48,15 @@ merge-feature-into-develop:
           fetch-depth: 0 # descargar todo el historial de commits 
 # 2 -merge to development branch
       - name: Merge to develop branch
-        if: {{ success()}}
+        if: ${{ success() }}
         run: |
           git config --global user.name "GitHub Actions"
-          git config --global user.email "ljimeneztorres@gmail,com"
-          git merge --no--ff --verbose origin/${{ github.event.pull_request.head.ref }} -m "Merge pull request ${{ github.event.number }} into develop"
+          git config --global user.email "ljimeneztorres@gmail.com"
+          git merge --no-ff --verbose origin/${{ github.event.pull_request.head.ref }} -m "Merge pull request ${{ github.event.number }} into develop"
 
 # 3- push to develop branch
       - name: Push changes after merge
-        if: {{ success()}}
+        if: ${{ success() }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
