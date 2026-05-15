@@ -65,7 +65,7 @@ jobs:
 #4 - call publish-jar-as-artifact workflow
       - name: trigger deploy artifact
         if: ${{ success() }}
-        uses: peter-evans/workflow-dispatch@v1
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
