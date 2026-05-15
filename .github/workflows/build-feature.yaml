@@ -61,4 +61,13 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.base_ref }}
-     
+
+#4 - call publish-jar-as-artifact workflow
+      - name: trigger deploy artifact
+        if: ${{ success() }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: publish-artifact-event
+          client-payload: '{"base_branch":"${{ github.base_ref }}"}'    
